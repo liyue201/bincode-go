@@ -42,3 +42,20 @@ func TestEncode(t *testing.T) {
 		t.Fatalf("encoding error")
 	}
 }
+
+func TestEncodeArray(t *testing.T) {
+	type arrayData struct {
+		receiver [][32]byte
+	}
+	p := arrayData{}
+	p.receiver = make([][32]byte, 2)
+	for i := 0; i < 32; i++ {
+		p.receiver[0][i] = byte(i)
+		p.receiver[1][i] = byte(i)
+	}
+
+	encoded := MustEncode(p)
+
+	t.Logf("encoded: %x", encoded)
+
+}

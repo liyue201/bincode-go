@@ -60,7 +60,17 @@ func encodeData(v reflect.Value) ([]byte, error) {
 				b = append(b, byte(v.Index(i).Uint()))
 			}
 			return b, nil
+		default:
+			for i := 0; i < v.Len(); i++ {
+				vi, err := encodeData(v.Index(i))
+				if err != nil {
+					return nil, err
+				}
+				b = append(b, vi...)
+			}
+			return b, nil
 		}
+
 		return nil, fmt.Errorf("unsupport type: %v, elem: %v", v.Kind(), v.Elem().Kind())
 	case reflect.Array:
 		switch v.Type().Elem().Kind() {
